@@ -1,0 +1,34 @@
+-- 1. BAZA
+CREATE DATABASE IF NOT EXISTS uredjaji_app CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE uredjaji_app;
+
+-- 2. KORISNICI
+CREATE TABLE users (
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP NULL,
+    updated_at TIMESTAMP NULL
+);
+
+-- 3. UREDJAJI
+CREATE TABLE devices (
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) UNIQUE NOT NULL,
+    type VARCHAR(50) NOT NULL,
+    location VARCHAR(100) NOT NULL,
+    connection_status ENUM('online', 'offline') NOT NULL,
+    battery_status TINYINT UNSIGNED NOT NULL,
+    created_at TIMESTAMP NULL,
+    updated_at TIMESTAMP NULL
+);
+
+-- 4. PIVOT TABELA ZA VEZU KORISNIK-UREDJAJ
+CREATE TABLE device_user (
+    user_id BIGINT UNSIGNED NOT NULL,
+    device_id BIGINT UNSIGNED NOT NULL,
+    PRIMARY KEY (user_id, device_id),
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (device_id) REFERENCES devices(id) ON DELETE CASCADE
+);
